@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2022"
+    ],
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "types": [
+      "vite/client",
+      "node"
+    ]
+  },
+  "include": [
+    "app/page.tsx",
+    "src",
+    "lib/schedule.ts",
+    "lib/lmc.ts",
+    "lib/utils.ts",
+    "components/ui/dialog.tsx",
+    "components/ui/select.tsx",
+    "components/ui/tabs.tsx",
+    "components/ui/button.tsx",
+    "vite.config.ts"
+  ]
+}

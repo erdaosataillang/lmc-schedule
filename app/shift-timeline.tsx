@@ -1,0 +1,10 @@
+import {useState} from "react";
+import {type Answer,dayLabel} from "@/lib/schedule";
+const minutes=(t:string)=>{const [h,m]=t.split(":").map(Number);return h*60+m;};
+export default function ShiftTimeline({answers,from,to}:{answers:Answer[];from:string;to:string}){
+ const [day,setDay]=useState(from),[time,setTime]=useState("12:00");
+ const rows=answers.map(a=>({...a,slots:(a.availability??[]).filter(s=>s.date===day)})).filter(a=>a.slots.length);
+ const start=Math.min(8*60,...rows.flatMap(a=>a.slots.map(s=>Math.floor(minutes(s.start)/60)*60))),end=Math.max(20*60,...rows.flatMap(a=>a.slots.map(s=>Math.ceil(minutes(s.end)/60)*60))),span=end-start;
+ const present=rows.filter(a=>a.slots.some(s=>s.start<=time&&s.end>time));
+ return <div className="shift-view"><div className="shift-filters"><label>表示する日付<input type="date" min={from} max={to} value={day} onInput={e=>setDay(e.currentTarget.value)}/></label><label>在席を確認する時刻<input type="time" value={time} onInput={e=>setTime(e.currentTarget.value)}/></label></div><div className="shift-summary"><strong>{dayLabel(day)} {time} · {present.length}人在席</strong><p>{present.map(a=>a.name).join("、")||"この時刻に登録されたシフトはありません。"}</p></div>{!rows.length?<p className="availability-empty">この日のシフトはまだ登録されていません。</p>:<><div className="shift-scroll"><div className="shift-chart"><div className="shift-axis"><span>担当者</span><div>{Array.from({length:(end-start)/60+1},(_,i)=><small key={i} style={{left:`${i*60/span*100}%`}}>{String(start/60+i).padStart(2,"0")}:00</small>)}</div></div>{rows.map((a,i)=><div className="shift-person" key={a.uid??a.name}><strong>{a.name}</strong><div className="shift-track">{a.slots.map(s=><div className={`shift-bar color-${i%3}`} key={s.id} style={{left:`${(minutes(s.start)-start)/span*100}%`,width:`${(minutes(s.end)-minutes(s.start))/span*100}%`}} title={`${a.name} ${s.start}〜${s.end}`}><span>{s.start} – {s.end}</span></div>)}</div></div>)}</div></div><div className="shift-readable">{rows.map(a=><div key={a.uid??a.name}><strong>{a.name}</strong><span>{a.slots.map(s=>`${s.start} – ${s.end}`).join(" / ")}</span></div>)}</div></>}</div>;
+}

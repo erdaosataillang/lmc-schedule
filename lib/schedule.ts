@@ -1,5 +1,5 @@
 export type Slot = {id:string; date:string; start:string; end:string};
-export type Poll = {id:string; title:string; project:string; organizer:string; slots:Slot[]; confirmed?:string; ownerId?:string; projectId?:string; mode?:"availability"; dateFrom?:string; dateTo?:string; confirmedSlot?:Slot};
+export type Poll = {id:string; title:string; project:string; organizer:string; slots:Slot[]; confirmed?:string; ownerId?:string; projectId?:string; mode?:"availability"|"shift"; dateFrom?:string; dateTo?:string; confirmedSlot?:Slot};
 export type Answer = {uid?:string;name:string; choices:Record<string,string>; availability?:Slot[]; unavailable?:boolean};
 export const projects = ["バンド練習", "ライブ準備", "新規プロジェクト"];
 export function dateKey(d:Date){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
